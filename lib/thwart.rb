@@ -30,7 +30,7 @@ module Thwart
   # autoload :Dsl, 'thwart/dsl'
   
   # The default can => able methods for CRUD
-  CrudActions = {:create => :creatable, :view => :viewable, :update => :updatable, :destroy => :destroyable}
+  CrudActions = {:create => :creatable, :show => :shoew, :update => :updatable, :destroy => :destroyable}
   
   Actions       = ActionsStore.new
   Roles         = RoleRegistry.new
