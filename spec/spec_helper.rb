@@ -32,14 +32,16 @@ def generic_model(name=nil, &block)
   klass
 end
 
-def class_with_module(mod)
-  Class.new do
+def class_with_module(mod, &block)
+  klass = Class.new do
     include mod
   end
+  klass.class_eval(&block) if block_given?
+  klass
 end
 
-def instance_with_module(mod)
-  class_with_module(mod).new
+def instance_with_module(mod, &block)
+  class_with_module(mod, &block).new
 end
 
 def instance_with_role_definition(&block)
