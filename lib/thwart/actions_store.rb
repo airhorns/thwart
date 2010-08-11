@@ -14,7 +14,7 @@ module Thwart
     #
     #   @param [Symbol] able_method The name of the [action-able]_by? method to check for.  
     def has_able?(able)
-      self.actions.has_value?(able)
+      self.actions.has_value?(able.to_sym)
     end
 
     # Returns true if Thwart is providing methods for the can_[action]? style action 
@@ -22,14 +22,14 @@ module Thwart
     #
     #   @param [Symbol] able_method The name of the can_[action]? method to check for.  
     def has_can?(can)
-      self.actions.has_key?(can)
+      self.actions.has_key?(can.to_sym)
     end
 
     # Finds the corresponding can from an able. 
     #
     #   @param [Symbol] able_method The name of the [action-able]_by? method.  
     def can_from_able(able)
-      self.actions.key(able)
+      self.actions.key(able.to_sym)
     end
 
     # Adds an action to actions and the correct methods to can and able modules.
@@ -45,7 +45,6 @@ module Thwart
         end
       else
         run_callbacks :add do
-          puts "#{can} => #{able}"
           @actions[can] = able
           @last_action = can
         end

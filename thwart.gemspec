@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{thwart}
-  s.version = "0.0.0"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Harry Brundage"]
-  s.date = %q{2010-08-09}
+  s.date = %q{2010-08-11}
   s.description = %q{Implements a robust Role Based Access System where Actors are granted permission to preform Actions by playing any number of Roles. All defined programatically in one place using a super easy DSL.}
   s.email = %q{harry@skylightlabs.ca}
   s.extra_rdoc_files = [
@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
      "lib/thwart/canable.rb",
      "lib/thwart/dsl.rb",
      "lib/thwart/enforcer.rb",
+     "lib/thwart/rails.rb",
      "lib/thwart/resource.rb",
      "lib/thwart/role.rb",
      "lib/thwart/role_builder.rb",
@@ -48,7 +49,8 @@ Gem::Specification.new do |s|
      "spec/role_registry_spec.rb",
      "spec/role_spec.rb",
      "spec/spec_helper.rb",
-     "spec/thwart_spec.rb"
+     "spec/thwart_spec.rb",
+     "thwart.gemspec"
   ]
   s.homepage = %q{http://github.com/hornairs/thwart}
   s.rdoc_options = ["--charset=UTF-8"]
