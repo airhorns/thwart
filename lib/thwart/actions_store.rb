@@ -45,6 +45,7 @@ module Thwart
         end
       else
         run_callbacks :add do
+          puts "#{can} => #{able}"
           @actions[can] = able
           @last_action = can
         end

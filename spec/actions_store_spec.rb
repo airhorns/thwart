@@ -50,13 +50,13 @@ describe Thwart::ActionsStore do
     it "should have C for create" do
       @actions.has_can?(:create).should == true
     end
-    it "should have R for ...er... view" do
-      @actions.has_can?(:view).should == true
+    it "should have R for .. er ... show" do
+      @actions.has_can?(:show).should == true
     end
     it "should have U for update" do
       @actions.has_can?(:update).should == true
     end
-    it "should have D for delete" do
+    it "should have D for destroy" do
       @actions.has_can?(:destroy).should == true
     end
   end

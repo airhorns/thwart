@@ -30,23 +30,23 @@ module Thwart
   # autoload :Dsl, 'thwart/dsl'
   
   # The default can => able methods for CRUD
-  CrudActions = {:create => :creatable, :view => :viewable, :update => :updatable, :destroy => :destroyable}
+  CrudActions = {:create => :creatable, :show => :showable, :update => :updatable, :destroy => :destroyable}
   
   Actions       = ActionsStore.new
+  Actionables   = ActionGroupBuilder.new(Actions)
   Roles         = RoleRegistry.new
   
   class << self
-    attr_reader :actionables_dsl, :role_dsl
+    attr_reader :role_dsl
     attr_accessor :default_query_response, :role_registry, :actor_must_play_role, :all_classes_are_resources
     delegate :create_action, :to => "Thwart::Actions"
-    delegate :create_action_group, :to => :actionables_dsl
+    delegate :create_action_group, :to => "Thwart::Actionables"
     delegate :create_role, :to => :role_dsl
     delegate :query, :to => "Thwart::Roles"
     
     def configure(&block)
       # Create builder DSLs for this configuration block
-      @actionables_dsl = ActionGroupBuilder.new(Actions)
-      @role_dsl = RoleBuilder.new(@actionables_dsl)
+      @role_dsl = RoleBuilder.new(Actionables)
       Roles.monitor_builder(@role_dsl)
       
       # Configure
@@ -55,7 +55,6 @@ module Thwart
       dsl.evaluate(self, &block)
       
       # Unset and stop monitoring builder DSLs so they can be GC'd
-      @actionables_dsl = nil
       @role_dsl = nil
       Roles.monitor_builder(nil)
       self
