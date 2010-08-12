@@ -36,5 +36,10 @@ describe Thwart::Enforcer do
       Thwart.stub(:query => true)
       lambda { @controller_klass.new.thwart_access(@r, :an_action) }.should_not raise_error(Thwart::NoPermissionError)
     end
+    it "should convert string actions" do
+      Thwart.stub(:query => true)
+      lambda { @controller_klass.new.thwart_access(@r, "an_action") }.should_not raise_error(Thwart::NoPermissionError)
+    end
+    
   end
 end

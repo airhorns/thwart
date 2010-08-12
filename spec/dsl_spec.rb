@@ -45,7 +45,7 @@ describe Thwart::Dsl do
   describe "with method_missing defined on the target" do
     before do
       target_class = Class.new do
-        def respond_to?(name)
+        def respond_to?(name,  other = false)
           return true if [:test1, :test2].include?(name)
           super
         end

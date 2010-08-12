@@ -6,11 +6,20 @@ module Thwart::Resource
     base.extend ClassMethods
   end
   
+  def thwart_name
+    self.class.thwart_name
+  end
+  
   module ClassMethods
     attr_accessor :thwart_name
     
+    def thwart_name
+      return nil unless @thwarted
+      return @thwart_name unless @thwart_name.nil?      
+      ActiveSupport::Inflector.singularize(self.table_name).to_sym if self.respond_to?(:table_name)
+    end
     def thwart_access(&block) 
-      self.thwart_name = ActiveSupport::Inflector.singularize(self.table_name) if self.respond_to?(:table_name)
+      @thwarted = true
       
       # Set up DSL using dsl helper
       if block_given? 

@@ -22,7 +22,7 @@ module Thwart
       self.target
     end
     
-    def respond_to?(name)
+    def respond_to?(name, other = false)
       if @all
         return target.respond_to?(name)
       else

@@ -21,10 +21,9 @@ module Thwart
     def query(actor, resource, action) 
       @query_result_found = false
       resp = nil
-
       if self.responses.has_key?(action)
         # Find the resource scope response if it exists {:view => {:foo => bool}}
-        resp = self.resource_response(self.responses[action], resource) if !found? 
+        resp = self.resource_response(self.responses[action], self.find_resource_name(resource)) if !found? 
         # Find the action scope response if it exists {:view => bool}
         resp = self.action_response(action) if !found?
       end
@@ -34,14 +33,14 @@ module Thwart
       # Call it if it is a proc
       resp = resp.call(actor, resource, action) if resp.respond_to?(:call) 
 
-      return resp
+      resp
     end
     
-    def resource_response(resources, resource)
+    def resource_response(resources, name)
       # Return the resource scoped response if it exists
       if resources.respond_to?(:[]) && resources.respond_to?(:include?) 
-        if resources.include?(resource)
-          return found!(resources[resource])
+        if resources.include?(name)
+          return found!(resources[name])
         elsif resources.include?(:_other)
           return found!(resources[:_other])
         end
@@ -56,6 +55,17 @@ module Thwart
         return found!(response)
       end
       nil
+    end
+    
+    def find_resource_name(resource)
+      return resource if resource.is_a?(Symbol)
+      r ||= resource.thwart_name if resource.respond_to?(:thwart_name)
+      if resource.class != Class
+        r ||= resource.class.thwart_name if resource.class.respond_to?(:thwart_name)
+        r ||= resource.class.name.downcase if Thwart.all_classes_are_resources
+      end
+      r = r.to_sym if r.respond_to?(:to_sym)
+      r
     end
     
     private

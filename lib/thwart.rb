@@ -38,7 +38,7 @@ module Thwart
   
   class << self
     attr_reader :role_dsl
-    attr_accessor :default_query_response, :role_registry, :actor_must_play_role, :all_classes_are_resources
+    attr_accessor :default_query_response, :role_registry, :actor_must_play_role, :all_classes_are_resources, :log_query_path, :last_query_path
     delegate :create_action, :to => "Thwart::Actions"
     delegate :create_action_group, :to => "Thwart::Actionables"
     delegate :create_role, :to => :role_dsl
@@ -60,7 +60,10 @@ module Thwart
       self
     end
   end
+  self.log_query_path = false
   
   class MissingAttributeError < StandardError; end
   class NoPermissionError < StandardError; end
 end
+
+require 'thwart/rails' if defined?(Rails)

@@ -1,3 +1,5 @@
 require 'thwart'
-ActiveRecord::Base.send :include, Thwart::Resource
+class ActiveRecord::Base
+  include Thwart::Resource
+end
 Thwart::Actions.add_crud!
