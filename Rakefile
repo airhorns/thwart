@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rake'
-
+require 'bundler'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
@@ -10,8 +10,7 @@ begin
     gem.email = "harry@skylightlabs.ca"
     gem.homepage = "http://github.com/hornairs/thwart"
     gem.authors = ["Harry Brundage"]
-    gem.add_development_dependency "rspec", ">= 2.0.0.beta19"
-    gem.add_dependency "activesupport", ">= 3.0.rc1"
+    gem.add_bundler_dependencies
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
