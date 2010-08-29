@@ -28,7 +28,7 @@ module Thwart
       else
         q = [role]
         while r = q.shift
-          resp = r.query(actor, resource, action,)
+          resp = r.query(actor, resource, action)
           
           if Thwart.log_query_path
             Thwart.last_query_path.push("Querying #{r.name}")

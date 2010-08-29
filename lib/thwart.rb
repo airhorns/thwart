@@ -1,4 +1,5 @@
 require 'active_support'
+require 'active_support/ruby/shim'
 require 'active_support/callbacks'
 require 'active_support/core_ext/module/attribute_accessors'
 require "active_support/core_ext/module/delegation"

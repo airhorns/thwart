@@ -13,11 +13,10 @@ module Thwart
     def evaluate(a_target, &block)
       self.target = a_target
       self.method_map = target.public_methods.inject({}) do |acc, m| 
-        key = m.to_s.gsub("=", "").intern
+        key = m.to_s.gsub(/=$/, "").to_sym
         acc[key] = m if acc[key].nil? || m != key
         acc 
       end.merge(self.extra_methods)
-      
       self.instance_eval(&block)
       self.target
     end
