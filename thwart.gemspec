@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{thwart}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Harry Brundage"]
-  s.date = %q{2010-08-10}
+  s.date = %q{2010-08-29}
   s.description = %q{Implements a robust Role Based Access System where Actors are granted permission to preform Actions by playing any number of Roles. All defined programatically in one place using a super easy DSL.}
   s.email = %q{harry@skylightlabs.ca}
   s.extra_rdoc_files = [
@@ -70,7 +70,8 @@ Gem::Specification.new do |s|
      "spec/spec_helper.rb",
      "spec/thwart_spec.rb",
      "examples/a_complete_example.rb",
-     "examples/example_helper.rb"
+     "examples/example_helper.rb",
+     "examples/testing.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -78,15 +79,18 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rspec>, [">= 2.0.0.beta19"])
-      s.add_runtime_dependency(%q<activesupport>, [">= 3.0.rc1"])
+      s.add_runtime_dependency(%q<activesupport>, ["~> 3.0.rc1"])
+      s.add_runtime_dependency(%q<i18n>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.0.0.beta.20"])
     else
-      s.add_dependency(%q<rspec>, [">= 2.0.0.beta19"])
-      s.add_dependency(%q<activesupport>, [">= 3.0.rc1"])
+      s.add_dependency(%q<activesupport>, ["~> 3.0.rc1"])
+      s.add_dependency(%q<i18n>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["~> 2.0.0.beta.20"])
     end
   else
-    s.add_dependency(%q<rspec>, [">= 2.0.0.beta19"])
-    s.add_dependency(%q<activesupport>, [">= 3.0.rc1"])
+    s.add_dependency(%q<activesupport>, ["~> 3.0.rc1"])
+    s.add_dependency(%q<i18n>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["~> 2.0.0.beta.20"])
   end
 end
 
