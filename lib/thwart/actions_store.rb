@@ -29,7 +29,8 @@ module Thwart
     #
     #   @param [Symbol] able_method The name of the [action-able]_by? method.  
     def can_from_able(able)
-      self.actions.key(able.to_sym)
+      pair = self.actions.find {|k, v| v == able}
+      pair.first if pair
     end
 
     # Adds an action to actions and the correct methods to can and able modules.

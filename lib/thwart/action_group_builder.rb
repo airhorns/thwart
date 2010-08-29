@@ -37,7 +37,6 @@ module Thwart
       
       return name.map{|n| resolve_action_group(n)}.flatten.uniq if name.respond_to?(:map)
       return self.actionables[name].flatten.uniq if self.actionables.include?(name)
-      puts self.actionables
       raise Thwart::ActionOrGroupNotFoundError, "Action or group #{name} could not be found!"
     end
     

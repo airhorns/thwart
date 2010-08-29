@@ -45,10 +45,8 @@ describe Thwart do
       end
     end
     it "should create new action groups" do
-      actionables = double("actionables")
-      Thwart::ActionGroupBuilder.should_receive(:new).and_return(actionables)
-      actionables.should_receive(:create_action_group).with(:manage)
-      actionables.should_receive(:create_action_group).with(:inspect, [])
+      Thwart::Actionables.should_receive(:create_action_group).with(:manage)
+      Thwart::Actionables.should_receive(:create_action_group).with(:inspect, [])
       Thwart.configure do
         action_group :manage
         action_group :inspect, []

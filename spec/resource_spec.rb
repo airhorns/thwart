@@ -11,7 +11,7 @@ describe Thwart::Resource do
     end
     
     it "should have set its own name" do
-      @resource.class.thwart_name.should == "generic"
+      @resource.class.thwart_name.should == :generic
     end
   end
   

@@ -95,7 +95,7 @@ module Thwart
       @current_response = old
     end
 
-    def respond_to?(name)
+    def respond_to?(name,  other = false)
       return true if self.actionables.has_key?(name)
       super
     end

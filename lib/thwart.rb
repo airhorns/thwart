@@ -1,4 +1,5 @@
 require 'active_support'
+require 'active_support/ruby/shim'
 require 'active_support/callbacks'
 require 'active_support/core_ext/module/attribute_accessors'
 require "active_support/core_ext/module/delegation"
@@ -30,23 +31,23 @@ module Thwart
   # autoload :Dsl, 'thwart/dsl'
   
   # The default can => able methods for CRUD
-  CrudActions = {:create => :creatable, :show => :shoew, :update => :updatable, :destroy => :destroyable}
+  CrudActions = {:create => :creatable, :show => :showable, :update => :updatable, :destroy => :destroyable}
   
   Actions       = ActionsStore.new
+  Actionables   = ActionGroupBuilder.new(Actions)
   Roles         = RoleRegistry.new
   
   class << self
-    attr_reader :actionables_dsl, :role_dsl
-    attr_accessor :default_query_response, :role_registry, :actor_must_play_role, :all_classes_are_resources
+    attr_reader :role_dsl
+    attr_accessor :default_query_response, :role_registry, :actor_must_play_role, :all_classes_are_resources, :log_query_path, :last_query_path
     delegate :create_action, :to => "Thwart::Actions"
-    delegate :create_action_group, :to => :actionables_dsl
+    delegate :create_action_group, :to => "Thwart::Actionables"
     delegate :create_role, :to => :role_dsl
     delegate :query, :to => "Thwart::Roles"
     
     def configure(&block)
       # Create builder DSLs for this configuration block
-      @actionables_dsl = ActionGroupBuilder.new(Actions)
-      @role_dsl = RoleBuilder.new(@actionables_dsl)
+      @role_dsl = RoleBuilder.new(Actionables)
       Roles.monitor_builder(@role_dsl)
       
       # Configure
@@ -55,13 +56,15 @@ module Thwart
       dsl.evaluate(self, &block)
       
       # Unset and stop monitoring builder DSLs so they can be GC'd
-      @actionables_dsl = nil
       @role_dsl = nil
       Roles.monitor_builder(nil)
       self
     end
   end
+  self.log_query_path = false
   
   class MissingAttributeError < StandardError; end
   class NoPermissionError < StandardError; end
 end
+
+require 'thwart/rails' if defined?(Rails)

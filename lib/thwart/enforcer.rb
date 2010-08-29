@@ -1,12 +1,17 @@
 module Thwart
   module Enforcer
-    def thwart_access(resource)
+    def thwart_access(resource, action = nil)
+      if action.blank?
+        raise ArgumentError, "thwart_access needs an action or the params hash to have an [:action] to enforce." if !self.respond_to?(:params) || !self.params.respond_to?(:[]) || self.params[:action].nil?
+        action = params[:action] 
+      end
+      action = action.to_sym
       raise ArgumentError, "Thwart needs a current_user method to enforce permissions." unless self.respond_to?(:current_user)
-      raise ArgumentError, "Thwart needs the params hash to have an [:action] to enforce." if params.nil? || params[:action].nil?
-      raise ArgumentError, "Unknown action #{params[:action]} to enforce" unless Thwart::Actions.has_can?(params[:action])
+      
+      raise ArgumentError, "Unknown action #{action} to enforce" unless Thwart::Actions.has_can?(action)
 
-      unless Thwart.query(current_user, resource, params[:action])
-        raise Thwart::NoPermissionError, "User #{current_user} doesn't have permission to #{params[:action]} #{resource}."
+      unless Thwart.query(current_user, resource, action)
+        raise Thwart::NoPermissionError, "User #{current_user} doesn't have permission to #{action} #{resource}."
       else
         true
       end

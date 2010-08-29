@@ -49,34 +49,14 @@ describe Thwart::RoleRegistry do
       actor = double("Actor", :thwart_role => :role1)
       @registry.find_actor_role(actor).should == @role
     end
+    it "should convert strings to roles" do
+      actor = double("Actor", :thwart_role => "role1")
+      @registry.find_actor_role(actor).should == @role
+    end
     it "should find nil for symbols pointing to non registered roles " do
       actor = double("Actor", :thwart_role => :role2)
       @registry.find_actor_role(actor).should == nil
     end
-  end
-  context "resource finding" do
-    it "should find nil for nil" do
-      @registry.find_resource_identifier(nil).should == nil
-    end
-    it "should find using the thwart_name attribute" do
-      resource = double("Resource", :thwart_name => :balls)
-      @registry.find_resource_identifier(resource).should == :balls
-    end
-    it "should find using the class thwart_name attribute" do
-      klass = Class.new do
-        def thwart_name
-          :balls
-        end
-      end
-      @registry.find_resource_identifier(klass.new).should == :balls
-    end
-    it "should find using the class name if the gem wide setting is set" do
-      Thwart.all_classes_are_resources = true
-      class Bollocks; end
-      @registry.find_resource_identifier(Bollocks.new).should == :bollocks
-      Thwart.all_classes_are_resources = false
-    end
-    
   end
   context "querying" do
     it "should return the default if the role can't be found and the gem wide setting is set" do
@@ -108,6 +88,14 @@ describe Thwart::RoleRegistry do
       
       it "should query the role" do
         @registry.query(actor_with_role(@role1), nil, nil).should == false
+      end
+      
+      it "should log the query path if the gem wide setting is set" do
+        Thwart.stub(:log_query_path => true)
+        a = actor_with_role(@role1)
+        @registry.query(a, nil, nil)
+        Thwart.last_query_path.should == [
+          {:actor => a, :resource => nil, :action => nil}, {:actor_role => :role1, :resource_name => nil}, "Querying role1", @role1, "Response: false"]
       end
       
       it "should query the parents in a breadth first order if the role query is unsuccessful" do 

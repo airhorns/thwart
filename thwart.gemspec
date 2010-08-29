@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
      ".gitignore",
+     "Gemfile",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
@@ -33,6 +34,7 @@ Gem::Specification.new do |s|
      "lib/thwart/canable.rb",
      "lib/thwart/dsl.rb",
      "lib/thwart/enforcer.rb",
+     "lib/thwart/rails.rb",
      "lib/thwart/resource.rb",
      "lib/thwart/role.rb",
      "lib/thwart/role_builder.rb",
@@ -70,8 +72,7 @@ Gem::Specification.new do |s|
      "spec/spec_helper.rb",
      "spec/thwart_spec.rb",
      "examples/a_complete_example.rb",
-     "examples/example_helper.rb",
-     "examples/testing.rb"
+     "examples/example_helper.rb"
   ]
 
   if s.respond_to? :specification_version then

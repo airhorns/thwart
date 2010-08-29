@@ -24,7 +24,32 @@ describe Thwart::Role do
     @role.parents += [:a, :c]
     @role.parents.should == [:a, :b, :c]
   end
-  
+  context "resource finding" do
+    before do
+      @role = instance_with_role_definition
+    end
+    it "should find nil for nil" do
+      @role.find_resource_name(nil).should == nil
+    end
+    it "should find using the thwart_name attribute" do
+      resource = double("Resource", :thwart_name => :balls)
+      @role.find_resource_name(resource).should == :balls
+    end
+    it "should find using the class thwart_name attribute" do
+      klass = Class.new do
+        def thwart_name
+          "balls"
+        end
+      end
+      @role.find_resource_name(klass.new).should == :balls
+    end
+    it "should find using the class name if the gem wide setting is set" do
+      Thwart.all_classes_are_resources = true
+      class Bollocks; end
+      @role.find_resource_name(Bollocks.new).should == :bollocks
+      Thwart.all_classes_are_resources = false
+    end
+  end
   context "with simple responses set" do
     before do
       @role = instance_with_role_definition do
