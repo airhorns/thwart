@@ -15,6 +15,7 @@ module Thwart
     
     def query(actor, resource, action)    
       role = self.find_actor_role(actor)
+      # logging setup
       if Thwart.log_query_path
         Thwart.last_query_path = [] 
         Thwart.last_query_path.push({:actor => actor, :resource => resource, :action => action})
@@ -39,6 +40,7 @@ module Thwart
           if resp != nil
             return resp # positive/negative response from the role, a rule governs the role on this query
           else
+            # nil response from the role, it has nothing to say about this query
             q = q | r.parents.map do |a| 
               a = self.find_role(a) if a.is_a?(Symbol)
               a 
