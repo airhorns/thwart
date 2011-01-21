@@ -1,15 +1,20 @@
 module Thwart
   class DslError < NoMethodError; end
+  # Handy internal class for mapping calls in config blocks onto instances and allowing for some
+  # syntax flexibility and goodness.
   class Dsl
     attr_accessor :extra_methods, # Hash of the extra method mappings of this DSL => target
                   :method_map,    # Holds the whole method map hash
-                  :target,         # What object the DSL maps methods on to
+                  :target,        # What object the DSL maps methods on to
                   :all            # Wheather or not to allow all methods (including dynamic ones like method missing) to be mapped
     
     def initialize(map = {})
       self.extra_methods = map
     end
-    
+   
+    # Evaluates some code written in the DSL in the context of some target which conforms to the map.
+    # @param [Object] a_target The object to which the mapped methods will apply if called in the block
+    # @param [Block] block The code written in the DSL to be evaluated.
     def evaluate(a_target, &block)
       self.target = a_target
       self.method_map = target.public_methods.inject({}) do |acc, m| 

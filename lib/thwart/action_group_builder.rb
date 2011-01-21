@@ -1,4 +1,5 @@
 module Thwart
+  # Responsible for building and managing the available actions and the groups that alias them.
   class ActionGroupBuilder
     # Holds all the different action groups in actionables[:name] => [array of resolved actions]
     attr_accessor :actionables 
@@ -27,7 +28,7 @@ module Thwart
     end
     
     # Resolves some actionables recursively down to the raw actions it corresponds to.
-    # @params name [symbol|array] the symbol (array) referring to the existing actionables
+    # @param name [symbol|array] the symbol (or symbol array) referring to the existing actionables
     def resolve_action_group(name)
       # - if name is an array => resolve it recursively
       # - if name is in the action groups, pull out its existing resolution
@@ -49,6 +50,7 @@ module Thwart
       end
     end
     
+    # @param actions_store [Thwart::Actions] the Actions repository. Internally maintained. 
     def initialize(actions_store = Thwart::Actions)
       builder = self
       @actions_store = actions_store

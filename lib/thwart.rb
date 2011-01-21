@@ -6,29 +6,17 @@ require "active_support/core_ext/module/delegation"
 require "active_support/core_ext/array/wrap"
 
 
-require 'thwart/canable'
-require 'thwart/actions_store'
-require 'thwart/action_group_builder'
-require 'thwart/role_registry'
-require 'thwart/role_builder'
-require 'thwart/role'
-require 'thwart/resource'
-require 'thwart/actor'
-require 'thwart/enforcer'
-require 'thwart/dsl'
-
 module Thwart
-  # autoload :Cans, 'thwart/canable'
-  # autoload :Ables, 'thwart/canable'
-  # autoload :ActionsStore, 'thwart/actions_store'
-  # autoload :ActionGroupBuilder, 'thwart/action_group_builder'
-  # autoload :RoleRegistry, 'thwart/role_registry'
-  # autoload :RoleBuilder, 'thwart/role_builder'
-  # autoload :Role, 'thwart/role'
-  # autoload :DefaultRole, 'thwart/role'
-  # autoload :Resource, 'thwart/resource'
-  # autoload :Actor, 'thwart/actor'
-  # autoload :Dsl, 'thwart/dsl'
+  require 'thwart/canable'
+  require 'thwart/actions_store'
+  require 'thwart/action_group_builder'
+  require 'thwart/role_registry'
+  require 'thwart/role_builder'
+  require 'thwart/role'
+  require 'thwart/resource'
+  require 'thwart/actor'
+  require 'thwart/enforcer'
+  require 'thwart/dsl'
   
   # The default can => able methods for CRUD
   CrudActions = {:create => :creatable, :show => :showable, :update => :updatable, :destroy => :destroyable}
@@ -45,6 +33,9 @@ module Thwart
     delegate :create_role, :to => :role_dsl
     delegate :query, :to => "Thwart::Roles"
     
+
+    # Opens up a configuration block to add permission parameters into thwart.
+    # Pass this a block defining your application's permissions structure before trying to enforce it.
     def configure(&block)
       # Create builder DSLs for this configuration block
       @role_dsl = RoleBuilder.new(Actionables)
@@ -61,6 +52,7 @@ module Thwart
       self
     end
   end
+
   self.log_query_path = false
   
   class MissingAttributeError < StandardError; end
