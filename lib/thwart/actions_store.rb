@@ -1,8 +1,13 @@
 module Thwart
   class ActionsStore
     include ActiveSupport::Callbacks
+
+    # Tracks the last added action to the action store, useful for referencing in callbacks.
     attr_accessor :last_action
+
+    # Holds a hash of defined actions in the can -> able structure.
     attr_reader :actions
+
     define_callbacks :add
   
     def initialize
@@ -77,7 +82,7 @@ module Thwart
       end
     end
 
-    # Add the CRUD methods to the Thwart actions (create, read, update, destroy)
+    # Add the ubiquitous CRUD actions to Thwart's set. CRUD includes create, read, update, and destroy.
     def add_crud!
       if @crud.nil? || @crud == false      
         Thwart::CrudActions.each do |(k,v)|

@@ -1,5 +1,6 @@
 module Thwart
   # Module in which the can_[action]? methods hang out
+  # All credit for this idea belongs to {http://railstips.org/ John Nunemaker} and his original gem {https://github.com/jnunemaker/canable Canable}.
   module Cans   
   
     def respond_to?(*args)
@@ -15,6 +16,7 @@ module Thwart
   end
 
   # Module in which the [action]able_by? methods hang out
+  # All credit for this idea belongs to {http://railstips.org/ John Nunemaker} and his original gem {https://github.com/jnunemaker/canable Canable}.
   module Ables
     def respond_to?(*args)
       return true if Thwart::Actions.find_able(args.first) != false
