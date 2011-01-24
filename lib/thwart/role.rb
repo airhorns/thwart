@@ -1,5 +1,5 @@
 module Thwart
-  
+  # Internal module encapsulating the various permissions an actor may play. Fields queries.
   module Role
     attr_accessor :name, :default_response, :responses
 
@@ -18,6 +18,11 @@ module Thwart
       @parents
     end    
     
+    # Queries this role to see if it has any rules that govern the actor trying to perform the action on the resource.
+    # @param {Thwart::Actor} actor The actor trying to perform the action on the resource
+    # @param {Thwart::Resource|Class|Symbol} resource The resource to which the actor might act upon
+    # @param {Symbol} action The name of the action being attempted
+    # @return {true|false|nil} Returns a boolean if this role has a rule that applies, or nil if no rules apply. The action can be performed if the query returns true.
     def query(actor, resource, action) 
       @query_result_found = false
       resp = nil
@@ -35,7 +40,9 @@ module Thwart
 
       resp
     end
-    
+   
+    # Traverses the rule tree to see if a rule exists governing the class of resources the queried resource belongs to. 
+    # @private
     def resource_response(resources, name)
       # Return the resource scoped response if it exists
       if resources.respond_to?(:[]) && resources.respond_to?(:include?) 
@@ -48,6 +55,8 @@ module Thwart
       nil
     end
     
+    # Traverses the rule tree to see if a rule exists governing the class of action the actor is trying to perform
+    # @private
     def action_response(action)
       # Return the action level boolean, proc, or nil if it exists is the responses array
       response = self.responses[action]
@@ -57,6 +66,8 @@ module Thwart
       nil
     end
     
+    # Normalizes the name of the resource being queried as might be found in the rule tree
+    # @param {Symbol|Thwart::Resource|Class|Object} resource An object which may be a Thwart::Resource, a string/symbol resource name, or a class/object.
     def find_resource_name(resource)
       return resource if resource.is_a?(Symbol)
       r ||= resource.thwart_name if resource.respond_to?(:thwart_name)
@@ -69,23 +80,25 @@ module Thwart
     end
     
     private
-    
+
+    # Internal tracking method for tracking if an applicable rule has been discovered.   
     def found!(response)
       @query_result_found = true
       response
     end
-    
+
+    # Internal tracking method for tracking if an applicable rule has been discovered.       
     def found?
       @query_result_found ||= false
       @query_result_found == true
     end
   end
-  
+ 
+  # Internal class adopted by actors as the default response. 
   class DefaultRole
     include Thwart::Role
     def query(*args)
       return Thwart.default_query_response
     end
   end
-  
 end
